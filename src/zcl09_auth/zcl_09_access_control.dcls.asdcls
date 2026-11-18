@@ -1,0 +1,11 @@
+@EndUserText.label: 'ZCL_09_Access_control'
+@MappingRole: true
+define role ZCL_09_ACCESS_CONTROL {
+    grant
+        select
+            on
+                ZCL_09_I_Carrier 
+                    where 
+                      (AirlineID) = aspect pfcg_auth( ZCARR_09, ZCARR_09, ACTVT = '03');
+                        
+}

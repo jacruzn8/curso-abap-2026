@@ -1,0 +1,10 @@
+@EndUserText.label: 'Access control for CArrier'
+@MappingRole: true
+define role ZI_09_CARRIER_ACCESS {
+    grant
+        select
+            on
+                ZI_CARRIER_09
+                    where
+                        (AirlineID) = aspect pfcg_auth( ZI_CARR009, ZI_CARR_09, ACTVT = '03');
+}

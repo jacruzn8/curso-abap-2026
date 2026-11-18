@@ -1,0 +1,79 @@
+managed implementation in class ZBP_R_09VEHICLE_BOOK unique;
+strict ( 2 );
+with draft;
+extensible;
+define behavior for ZR_09VEHICLE_BOOK alias Zr09vehicleBook
+persistent table Z09_VEHICLE_BOOK
+extensible
+draft table Z09VHICLE_BOOK_D
+etag master Locallastchanged
+lock master total etag Lastchangedat
+authorization master( global )
+{
+  field ( readonly )
+   BookingID,
+// Ejercicio 2: Añadir TotalDays como campo solo lectura
+   TotalDays,
+// Ejercicio 3: Añadir Status como solo lectura.
+   Createdby,
+   Lastchangedby,
+   Lastchangedat,
+   Locallastchanged;
+
+
+
+ //Ejercicio 1: Declaración de la determination
+  determination calculateTotalDays on modify { field StartDate, EndDate; }
+
+ // Ejerciio 2: Validation de la Actividad 2: Ejecucion al guardar
+  validation validateDates on save { field StartDate, EndDate; }
+
+// Ejercicio 3: Determinación estado inicial
+// Determination para el estado inicial
+  determination setInitialStatus on modify { create; }
+
+
+// Action de instancia para cancelar reserva
+    action cancelBooking result [1] $self;
+
+
+
+  field ( numbering : managed )
+   BookingID;
+
+
+  create;
+  update;
+  delete;
+
+  draft action Activate optimized;
+  draft action Discard;
+  draft action Edit;
+  draft action Resume;
+  // Comentar esta línea en ejercicio 2 => draft determine action Prepare;
+
+  // Ejercicio 2
+  draft determine action Prepare
+  {
+    validation validateDates;
+  }
+
+  mapping for Z09_VEHICLE_BOOK corresponding extensible
+  {
+    BookingID = BOOKING_ID;
+    CustomerName = CUSTONMER_NAME;
+    Vehicle = VEHICLE;
+    StartDate = START_DATE;
+    EndDate = END_DATE;
+    Status = STATUS;
+    Totaldays = TOTALDAYS;
+    TotalPrice = TOTAL_PRICE;
+    Currency = CURRENCY;
+    Createdby = CREATEDBY;
+    Createdat = CREATEDAT;
+    Lastchangedby = LASTCHANGEDBY;
+    Lastchangedat = LASTCHANGEDAT;
+    Locallastchanged = LOCALLASTCHANGED;
+  }
+
+}
